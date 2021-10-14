@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import com.example.demo.exception.ValidationException;
 import com.example.demo.model.Contact;
 import com.example.demo.service.ContactService;
 
@@ -46,12 +47,15 @@ public class ViewController {
 			model.addAttribute("errorMessage", "Invalid Form Data");
 			return "redirect:/add-contact";
 		}
-		Contact newContact = contactService.addContact(contact);
-		if(newContact != null) {
-			return getAllContacts(model);
+		try {
+			contactService.addContact(contact);
+		} catch (ValidationException e) {
+			model.addAttribute("errorMessage", "Invalid Form Data");
+			return "redirect:/add-contact";
 		}
-		model.addAttribute("errorMessage", "Invalid Form Data");
-		return "redirect:/add-contact";
+		
+		return getAllContacts(model);
+		
 	}
 	
 	@GetMapping("/contacts")
@@ -60,5 +64,10 @@ public class ViewController {
 		logger.info("List of contacts"+contacts);
 		model.addAttribute("contacts", contacts);
 		return "contacts";
+	}
+	
+	@GetMapping("/access-denied")
+	public String getAccessDeniedPage() {
+		return "access-denied";
 	}
 }

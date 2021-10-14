@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 <meta charset="ISO-8859-1">
 <title>Home</title>
@@ -23,7 +24,7 @@
 	      <li class="nav-item">
 	        <a class="nav-link" th:href="@{/contacts}">View Contacts</a>
 	      </li>
-	      <li class="nav-item">
+	      <li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')">
 	        <a class="nav-link" th:href="@{/add-contact}">Add Contact</a>
 	      </li>
 	      <li class="nav-item">

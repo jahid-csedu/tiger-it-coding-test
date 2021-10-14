@@ -32,6 +32,9 @@
 	  </div>
 	</nav>
 	<div class="container">
+		<div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+		  <span th:text="${errorMessage}"></span>
+		</div>
 		<div class="card mt-5">
 			<div class="card-header text-center">
 				<h2>Add A Contact</h2>

@@ -39,6 +39,8 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.anyRequest()
 				.authenticated()
 			.and()
+				.exceptionHandling().accessDeniedPage("/access-denied")
+			.and()
 				.formLogin()
 				.loginPage("/login")
 				.defaultSuccessUrl("/home", true)

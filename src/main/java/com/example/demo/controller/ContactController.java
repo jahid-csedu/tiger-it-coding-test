@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.exception.ValidationException;
 import com.example.demo.model.Contact;
 import com.example.demo.service.ContactService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -27,7 +28,7 @@ public class ContactController {
 	Logger logger = (Logger) LoggerFactory.getLogger(ContactController.class);
 	
 	@PostMapping("/contacts")
-	public String addContact(@RequestBody Contact contact) throws JsonProcessingException {
+	public String addContact(@RequestBody Contact contact) throws JsonProcessingException, ValidationException {
 		ObjectMapper mapper = new ObjectMapper();
 		Contact addedContact = contactService.addContact(contact);
 		logger.info("New Contact Added" + addedContact.toString());

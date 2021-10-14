@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.exception.ValidationException;
 import com.example.demo.model.Contact;
 import com.example.demo.repository.ContactRepository;
 
@@ -18,21 +19,21 @@ public class ContactService {
 		return contactRepository.findAll();
 	}
 	
-	public Contact addContact(Contact contact) {
+	public Contact addContact(Contact contact) throws ValidationException {
 		if(contact.getName() == null || contact.getName().equals("")) {
-			return null;
+			throw new ValidationException("Name is required");
 		}
 		if(contact.getEmail()==null || contact.getEmail().equals("")) {
-			return null;
+			throw new ValidationException("Email is required");
 		}
 		if(getContactByEmail(contact.getEmail()) != null) {
-			return null;
+			throw new ValidationException("Email exists");
 		}
 		if(contact.getPhoneNumber() == null || contact.getPhoneNumber().equals("")) {
-			return null;
+			throw new ValidationException("Phone Number is required");
 		}
 		if(getContactByPhoneNumber(contact.getPhoneNumber()) != null) {
-			return null;
+			throw new ValidationException("Phone number exists");
 		}
 		return contactRepository.save(contact);
 	}
