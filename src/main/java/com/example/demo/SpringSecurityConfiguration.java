@@ -3,6 +3,7 @@ package com.example.demo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -13,45 +14,58 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.example.demo.service.UserDetailsServiceImplementation;
+
 @Configuration
 @EnableWebSecurity
 public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
-	UserDetailsService userDetailsService;
+	UserDetailsServiceImplementation userDetailsService;
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		//auth.authenticationProvider(authenticationProvider());
-		auth.inMemoryAuthentication()
-				.withUser("user").password(passwordEncoder().encode("user")).roles("USER")
-				.and()
-				.withUser("admin").password(passwordEncoder().encode("admin")).roles("ADMIN");
+		auth.authenticationProvider(authenticationProvider());
+//		auth.inMemoryAuthentication()
+//				.withUser("user").password(passwordEncoder().encode("user")).roles("USER")
+//				.and()
+//				.withUser("admin").password(passwordEncoder().encode("admin")).roles("ADMIN");
 	}
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.csrf().disable()
+		http.csrf()
+				.disable()
 			.authorizeRequests()
-			.antMatchers("/webjars/**").permitAll()
-			.antMatchers("/add-contact").hasRole("ADMIN")
-			.antMatchers("/contacts").hasAnyRole("USER", "ADMIN")
+			.antMatchers("/webjars/**")
+				.permitAll()
+			.antMatchers("/add-contact")
+				.hasRole("ADMIN")
+			.antMatchers("/contacts")
+				.hasAnyRole("USER", "ADMIN")
+			.antMatchers(HttpMethod.POST, "/api/**")
+				.hasRole("ADMIN")
+			.antMatchers(HttpMethod.GET, "api/**")
+				.hasAnyRole("USER", "ADMIN")
 			.anyRequest()
 				.authenticated()
 			.and()
-				.exceptionHandling().accessDeniedPage("/access-denied")
+			.exceptionHandling()
+				.accessDeniedPage("/access-denied")
 			.and()
-				.formLogin()
+			.formLogin()
 				.loginPage("/login")
 				.defaultSuccessUrl("/home", true)
 				.permitAll()
 			.and()
-				.logout()
+			.logout()
 				.logoutUrl("/logout")
 				.clearAuthentication(true)
 				.invalidateHttpSession(true)
+				.deleteCookies("JSESSIONID")
 				.logoutSuccessUrl("/login")
 				.permitAll();
+		
 		http.httpBasic();
 	}
 	

@@ -23,9 +23,6 @@ public class ContactService {
 		if(contact.getName() == null || contact.getName().equals("")) {
 			throw new ValidationException("Name is required");
 		}
-		if(contact.getEmail()==null || contact.getEmail().equals("")) {
-			throw new ValidationException("Email is required");
-		}
 		if(getContactByEmail(contact.getEmail()) != null) {
 			throw new ValidationException("Email exists");
 		}
