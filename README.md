@@ -6,7 +6,7 @@
 - for ADMIN user username=admin and password=admin
 - admin can view contact list as well as add contact
 - user can only view the contact list
-- I have used in memory authentication for user authentication
+- I have created 2 table in the database name users and roles and another table for many to many relationship of users and roles for user authentication
 - there are 2 rest apis. one for add new contact another for get all contacts
 - rest apis are secured with spring basic http authentication i.e. username and password should be provided in the request header
 - the project has basic error handling mechanism for rest apis
