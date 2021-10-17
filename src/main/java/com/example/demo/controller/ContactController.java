@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,6 +29,7 @@ public class ContactController {
 	Logger logger = (Logger) LoggerFactory.getLogger(ContactController.class);
 	
 	@PostMapping("/contacts")
+	@Secured("ROLE_ADMIN")
 	public String addContact(@RequestBody Contact contact) throws JsonProcessingException, ValidationException {
 		ObjectMapper mapper = new ObjectMapper();
 		Contact addedContact = contactService.addContact(contact);
@@ -36,6 +38,7 @@ public class ContactController {
 	}
 	
 	@GetMapping("/contacts")
+	@Secured({"ROLE_USER", "ROLE_ADMIN"})
 	public String getContacts() throws JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper();
 		List<Contact> contactList = contactService.getAllContact();

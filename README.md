@@ -9,5 +9,5 @@
 - USER can only view the contact list
 - I have created 2 table in the database name users and roles and another table for many to many relationship of users and roles for user authentication
 - There are 2 rest apis. one for add new contact another for get all contacts
-- Rest apis are secured with spring basic http authentication i.e. username and password should be provided in the request header
+- Rest apis are secured with jwt authentication
 - The project has basic error handling mechanism for rest apis
