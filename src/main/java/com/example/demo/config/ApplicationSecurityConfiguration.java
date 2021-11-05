@@ -19,14 +19,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.example.demo.jwt.JwtUsernamePasswordAuthenticationFilter;
 import com.example.demo.jwt.JwtVerifier;
-import com.example.demo.service.UserDetailsServiceImplementation;
+import com.example.demo.service.UserDetailsServiceImpl;
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class ApplicationSecurityConfiguration {
 	
 	@Autowired
-	UserDetailsServiceImplementation userDetailsService;
+	UserDetailsServiceImpl userDetailsService;
 	
 	@Configuration
 	@Order(1)
@@ -54,10 +54,11 @@ public class ApplicationSecurityConfiguration {
 				.and()
 				.requestMatchers(matchers -> matchers
 		                  .antMatchers("/api/**")
-		              )
-		              .authorizeRequests(authz -> authz
-		                  .anyRequest().authenticated()
-		              )
+		        )
+		        .authorizeRequests(authz -> authz
+		        		  .antMatchers("/login").permitAll()
+		        		  .anyRequest().authenticated()
+		        )
 				.addFilter(new JwtUsernamePasswordAuthenticationFilter(authenticationManager(), jwtConfig, secretKey))
 				.addFilterAfter(new JwtVerifier(jwtConfig, secretKey), JwtUsernamePasswordAuthenticationFilter.class);
 	//		
@@ -79,6 +80,8 @@ public class ApplicationSecurityConfiguration {
 				.csrf().disable()
 				.authorizeRequests()
 				.antMatchers("/webjars/**")
+					.permitAll()
+				.antMatchers("/h2-console")
 					.permitAll()
 				.antMatchers("/add-contact")
 					.hasRole("ADMIN")

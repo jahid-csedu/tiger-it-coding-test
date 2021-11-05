@@ -8,7 +8,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 
-public class UserDetailsImplementation implements UserDetails {
+public class UserDetailsImpl implements UserDetails {
 
 	/**
 	 * 
@@ -18,7 +18,7 @@ public class UserDetailsImplementation implements UserDetails {
 	private User user;
 	
 
-	public UserDetailsImplementation(User user) {
+	public UserDetailsImpl(User user) {
 		this.user = user;
 	}
 
